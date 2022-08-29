@@ -1,0 +1,38 @@
+FROM ubuntu:focal
+
+ARG GE_VER="2022.1.0"
+
+# Copy all installer files into container
+COPY age/ge-${GE_VER}-bin-lx-amd64.tar.gz . 
+COPY age/ge-${GE_VER}-common.tar.gz . 
+COPY age/ge-${GE_VER}-rstudio-age-lx-amd64.tar.gz .  
+
+
+# Extract AGE binaries 
+RUN mkdir -p /opt/age/${GE_VER} &&  \
+      tar xvfz /ge-${GE_VER}-bin-lx-amd64.tar.gz -C /opt/age/${GE_VER} && \
+      tar xvfz /ge-${GE_VER}-common.tar.gz -C /opt/age/${GE_VER} && \
+      rm -rf /ge-${GE_VER}-bin-lx-amd64.tar.gz /ge-${GE_VER}-common.tar.gz
+
+# Install a couple of tools 
+RUN apt-get update && apt-get install -y dnsutils vim iputils-ping 
+RUN apt-get install -y openssh-server sudo
+RUN apt-get install -y libnuma1 
+
+
+# Add admin user account
+RUN groupadd -g 6200 ageadmin && useradd -s /bin/bash -u 6200 -g 6200 ageadmin -m && \ 
+	chown -R ageadmin /opt/age
+RUN sudo -u ageadmin bash -l -c "ssh-keygen -t rsa -N '' -f /home/ageadmin/.ssh/id_rsa && cat /home/ageadmin/.ssh/id_rsa.pub >> /home/ageadmin/.ssh/authorized_keys"
+
+# Install 
+COPY age/inst.conf /opt/age/${GE_VER}/ 
+#RUN export TERM=vt100 && cd /opt/age/*/ && ./inst_sge -m -auto  /inst.conf   
+
+RUN echo ". /opt/age/${GE_VER}/default/common/settings.sh" >> /etc/profile
+
+COPY docker-start.sh /usr/local/bin/docker-start.sh
+
+ENTRYPOINT ["/usr/local/bin/docker-start.sh"]
+
+CMD ["head-node"]

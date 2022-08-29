@@ -1,0 +1,12 @@
+FROM ubuntu:focal
+
+ARG LIC_VER="15.1"
+
+COPY license/altair_licensing_${LIC_VER}.linux_x64.bin .
+
+RUN bash altair_licensing_${LIC_VER}.linux_x64.bin -i silent && rm -f altair_licensing_${LIC_VER}.linux_x64.bin
+
+COPY license/start-lic.sh .
+
+ENTRYPOINT ./start-lic.sh $LIC_VER 
+

@@ -22,9 +22,19 @@ Default user name and password are `rstudio/rstudio`.
 
 ## Starting the environment 
 
+First you will need to build the needed containers (this is a one-time activity): 
+
+```
+docker-compose build head rsw
+```
+
+Once done, you can start via
+
 ```
 docker-compose up c2 rsw -d 
 ```
+
+The cluster will then listen at http://localhost:8989 .
 
 ## Stopping the environment 
 ```

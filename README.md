@@ -18,6 +18,8 @@ Finally a valid license file `age.dat` needs to be deploes into the `license` fo
 
 In the environment launching the `docker-compose.yml`, the environment variable `RSW_LICENSE` must be set to a vaid license key. 
 
+Default user name and password are `rstudio/rstudio`.
+
 ## Starting the environment 
 
 ```

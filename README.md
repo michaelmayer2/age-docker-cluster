@@ -4,6 +4,8 @@ This repo will spin up a docker based Altair Grid Engine Cluster 2022.1.0. It co
 
 RStudio Workbench is running in a separate container (rsw) and has the new AGE Launcher 2022.1.0 pre-configured against the AGE cluster. 
 
+Version of RSW is 2022.07.1-554.pro3. 
+
 ## Pre-requisites 
 
 ### Altair Grid Engine 
@@ -28,3 +30,7 @@ docker-compose down
 ```
 
 It also may be advisable to clean out the volumes by running `scripts/clean-volumes.sh`.
+
+## RSW details
+
+The docker cluster uses a number of volumes for shared storage. For RSW it has set up shared storage for session-data as well as audit-data. 

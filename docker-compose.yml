@@ -27,8 +27,6 @@ services:
       - opt_age:/opt/age
       - home_rstudio:/home/rstudio
       - home_ageadmin:/home/ageadmin
-      - opt_r:/opt/R
-      - etc_rstudio:/etc/rstudio
     expose:
       - "6444"
       - "6445"
@@ -48,6 +46,7 @@ services:
       - opt_r:/opt/R
       - etc_rstudio:/etc/rstudio
       - usr_lib_rstudio:/usr/lib/rstudio-server
+      - shared_storage:/opt/rstudio/shared
     expose:
       - "6444"
     depends_on:
@@ -66,6 +65,7 @@ services:
       - opt_r:/opt/R
       - etc_rstudio:/etc/rstudio
       - usr_lib_rstudio:/usr/lib/rstudio-server
+      - shared_storage:/opt/rstudio/shared
     expose:
       - "6444"
     depends_on:
@@ -89,6 +89,7 @@ services:
       - opt_r:/opt/R
       - etc_rstudio:/etc/rstudio
       - usr_lib_rstudio:/usr/lib/rstudio-server
+      - shared_storage:/opt/rstudio/shared
     ports:
       - "8989:8787"
     depends_on:
@@ -102,3 +103,4 @@ volumes:
   opt_r:
   etc_rstudio:
   usr_lib_rstudio:
+  shared_storage:

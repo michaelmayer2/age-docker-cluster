@@ -25,7 +25,10 @@ services:
     privileged: true 
     volumes:
       - opt_age:/opt/age
-      - home:/home
+      - home_rstudio:/home/rstudio
+      - home_ageadmin:/home/ageadmin
+      - opt_r:/opt/R
+      - etc_rstudio:/etc/rstudio
     expose:
       - "6444"
       - "6445"
@@ -40,7 +43,11 @@ services:
     privileged: true 
     volumes:
       - opt_age:/opt/age 
-      - home:/home
+      - home_rstudio:/home/rstudio
+      - home_ageadmin:/home/ageadmin
+      - opt_r:/opt/R
+      - etc_rstudio:/etc/rstudio
+      - usr_lib_rstudio:/usr/lib/rstudio-server
     expose:
       - "6444"
     depends_on:
@@ -54,13 +61,44 @@ services:
     privileged: true
     volumes:
       - opt_age:/opt/age
-      - home:/home
+      - home_rstudio:/home/rstudio
+      - home_ageadmin:/home/ageadmin
+      - opt_r:/opt/R
+      - etc_rstudio:/etc/rstudio
+      - usr_lib_rstudio:/usr/lib/rstudio-server
     expose:
       - "6444"
     depends_on:
       - "c1"
 
+  rsw:
+    build:
+      context: . 
+      dockerfile: rsw/Dockerfile.rsw
+    image: rsw:2022.07.1-554.pro3
+    command: ["rsw"]
+    hostname: rsw.age_default
+    container_name: rsw
+    privileged: true
+    environment:
+      RSW_LICENSE: ${RSW_LICENSE}
+    volumes:
+      - opt_age:/opt/age
+      - home_rstudio:/home/rstudio
+      - home_ageadmin:/home/ageadmin
+      - opt_r:/opt/R
+      - etc_rstudio:/etc/rstudio
+      - usr_lib_rstudio:/usr/lib/rstudio-server
+    ports:
+      - "8989:8787"
+    depends_on:
+      - "head"
+
+
 volumes:
   opt_age:
-  home:
-
+  home_ageadmin:
+  home_rstudio:
+  opt_r:
+  etc_rstudio:
+  usr_lib_rstudio:

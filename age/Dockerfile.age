@@ -1,11 +1,11 @@
 FROM ubuntu:focal
 
+# Set AGE Version
 ARG GE_VER="2022.1.0"
 
-# Copy all installer files into container
+# COPY installers into container
 COPY age/ge-${GE_VER}-bin-lx-amd64.tar.gz . 
 COPY age/ge-${GE_VER}-common.tar.gz . 
-COPY age/ge-${GE_VER}-rstudio-age-lx-amd64.tar.gz .  
 
 
 # Extract AGE binaries 
@@ -25,11 +25,23 @@ RUN groupadd -g 6200 ageadmin && useradd -s /bin/bash -u 6200 -g 6200 ageadmin -
 	chown -R ageadmin /opt/age
 RUN sudo -u ageadmin bash -l -c "ssh-keygen -t rsa -N '' -f /home/ageadmin/.ssh/id_rsa && cat /home/ageadmin/.ssh/id_rsa.pub >> /home/ageadmin/.ssh/authorized_keys"
 
-# Install 
-COPY age/inst.conf /opt/age/${GE_VER}/ 
-#RUN export TERM=vt100 && cd /opt/age/*/ && ./inst_sge -m -auto  /inst.conf   
+# Add rstudio user account
+RUN groupadd -g 2000 rstudio && useradd -u 2000 rstudio -g rstudio
+RUN echo "rstudio:rstudio" | chpasswd
 
-RUN echo ". /opt/age/${GE_VER}/default/common/settings.sh" >> /etc/profile
+
+# Copy installation template into container  
+COPY age/inst.conf /opt/age/${GE_VER}/ 
+
+# Ensure AGE binaries are in users' PATH
+RUN echo ". /opt/age/${GE_VER}/default/common/settings.sh" >> /etc/bash.bashrc
+
+
+# Install R and RSW dependencies 
+# apt show  r-4.2.0  | grep ^Depends | cut -d ":" -f 2 | sed 's/\,/ /g'
+RUN apt-get install -y  g++  gcc  gfortran  libbz2-dev  libblas-dev  libc6  libcairo2  libcurl4  libglib2.0-0  libgomp1  libicu-dev  libjpeg8  liblapack-dev  liblzma-dev  libpango-1.0-0  libpangocairo-1.0-0  libpaper-utils  libpcre2-dev  libpng16-16  libreadline8  libtcl8.6  libtiff5  libtk8.6  libx11-6  libxt6  make  ucf  unzip  zip  zlib1g-dev
+# apt show rstudio-servr ...
+RUN apt-get install -y rrdtool  psmisc  libapparmor1  libedit2  sudo  lsb-release  libclang-dev  libsqlite3-0  libpq5  libc6
 
 COPY docker-start.sh /usr/local/bin/docker-start.sh
 

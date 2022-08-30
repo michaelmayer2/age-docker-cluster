@@ -69,7 +69,7 @@ services:
     expose:
       - "6444"
     depends_on:
-      - "c1"
+      - "head"
 
   rsw:
     build:

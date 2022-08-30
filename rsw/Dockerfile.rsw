@@ -44,9 +44,9 @@ RUN sed -i 's/^www.*//' /etc/rstudio/rserver.conf && \
 	sed -i 's/^launcher-address=.*/launcher-address=127.0.0.1/' /etc/rstudio/rserver.conf && \
 	sed -i 's/^launcher-port=.*/launcher-port=5559/' /etc/rstudio/rserver.conf && \
         sed -i 's#^launcher-sessions-callback-address=.*#launcher-sessions-callback-address=http://rsw:8787#' /etc/rstudio/rserver.conf
-RUN echo "server-shared-storage-path=/opt/rstudio/shared-storage" >> /etc/rstudio/rserver.conf && \ 
+RUN echo "server-shared-storage-path=/opt/rstudio/shared" >> /etc/rstudio/rserver.conf && \ 
 	echo "audit-r-sessions=1" >> /etc/rstudio/rserver.conf && \
-	echo "audit-data-path=/opt/rstudio/shared-storage/audit-data" >> /etc/rstudio/rserver.conf &&  \
+	echo "audit-data-path=/opt/rstudio/shared/audit-data" >> /etc/rstudio/rserver.conf &&  \
 	echo "admin-enabled=1" >> /etc/rstudio/rserver.conf && \
 	echo "admin-group=rstudio" >> /etc/rstudio/rserver.conf
 RUN sed -i "s#^SGE_ROOT=.*#SGE_ROOT=/opt/age/${GE_VER}#" /etc/rstudio/launcher.AGE.conf && \

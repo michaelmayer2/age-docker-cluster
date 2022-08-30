@@ -8,8 +8,8 @@ services:
     image: age-license:15.0
     hostname: license.age_default
     container_name: age-license
-    ports:
-      - "6200:6200"
+    expose:
+      - "6200"
     volumes:
       - ./age.dat:/license/age.dat
     mac_address: de:59:34:6f:b6:98

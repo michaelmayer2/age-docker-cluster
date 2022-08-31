@@ -18,7 +18,7 @@ Finally a valid license file `age.dat` needs to be deploes into the `license` fo
 
 In the environment launching the `docker-compose.yml`, the environment variable `RSW_LICENSE` must be set to a vaid license key. 
 
-Default user name and password are `rstudio/rstudio`.
+Default user name and password are `rstudio/rstudio`. 
 
 ## Starting the environment 
 
@@ -34,7 +34,7 @@ Once done, you can start via
 docker-compose up c2 rsw -d 
 ```
 
-The cluster will then listen at http://localhost:8989 .
+The cluster will then listen at http://localhost:8787 .
 
 ## Stopping the environment 
 ```
@@ -45,4 +45,4 @@ It also may be advisable to clean out the volumes by running `scripts/clean-volu
 
 ## RSW details
 
-The docker cluster uses a number of volumes for shared storage. For RSW it has set up shared storage for session-data as well as audit-data. 
+RSW is setup to use shared storage for session-data as well as audit-data. Admin dashboard is enabled, too, for the rstudio user.   

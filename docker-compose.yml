@@ -91,7 +91,7 @@ services:
       - usr_lib_rstudio:/usr/lib/rstudio-server
       - shared_storage:/opt/rstudio/shared
     ports:
-      - "8989:8787"
+      - "8787:8787"
     depends_on:
       - "head"
 

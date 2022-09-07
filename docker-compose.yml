@@ -35,6 +35,9 @@ services:
 
   c1:
     image: age:2022.1.0 
+    build:
+      context: .
+      dockerfile: age/Dockerfile.age
     command: ["compute-node"]
     hostname: c1.age_default
     container_name: c1
@@ -54,6 +57,9 @@ services:
 
   c2:
     image: age:2022.1.0
+    build:
+      context: .
+      dockerfile: age/Dockerfile.age
     command: ["compute-node"]
     hostname: c2.age_default
     container_name: c2
@@ -91,7 +97,7 @@ services:
       - usr_lib_rstudio:/usr/lib/rstudio-server
       - shared_storage:/opt/rstudio/shared
     ports:
-      - "8787:8787"
+      - "8989:8787"
     depends_on:
       - "head"
 

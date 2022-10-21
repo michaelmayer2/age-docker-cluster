@@ -31,7 +31,7 @@ docker-compose build head rsw
 Once done, you can start via
 
 ```
-docker-compose up c2 rsw -d 
+docker-compose up -d 
 ```
 
 The cluster will then listen at http://localhost:8787 .

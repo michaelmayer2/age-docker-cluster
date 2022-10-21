@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: license/Dockerfile.license
     image: age-license:15.0
-    hostname: license.age_default
+    hostname: license.age-docker-cluster_default
     container_name: age-license
     expose:
       - "6200"
@@ -21,7 +21,7 @@ services:
     image: age:2022.1.0  
     command: ["head-node"]
     container_name: head 
-    hostname: head.age_default
+    hostname: head.age-docker-cluster_default
     privileged: true 
     volumes:
       - opt_age:/opt/age
@@ -39,7 +39,7 @@ services:
       context: .
       dockerfile: age/Dockerfile.age
     command: ["compute-node"]
-    hostname: c1.age_default
+    hostname: c1.age-docker-cluster_default
     container_name: c1
     privileged: true 
     volumes:
@@ -61,7 +61,7 @@ services:
       context: .
       dockerfile: age/Dockerfile.age
     command: ["compute-node"]
-    hostname: c2.age_default
+    hostname: c2.age-docker-cluster_default
     container_name: c2
     privileged: true
     volumes:
@@ -83,7 +83,7 @@ services:
       dockerfile: rsw/Dockerfile.rsw
     image: rsw:2022.07.1-554.pro3
     command: ["rsw"]
-    hostname: rsw.age_default
+    hostname: rsw.age-docker-cluster_default
     container_name: rsw
     privileged: true
     environment:

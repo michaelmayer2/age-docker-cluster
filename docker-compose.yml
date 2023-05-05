@@ -20,7 +20,7 @@ services:
       dockerfile: age/Dockerfile.age
     image: age:2022.1.0  
     command: ["head-node"]
-    container_name: age-head 
+    container_name: head 
     hostname: head.age-docker-cluster_default
     privileged: true 
     volumes:
@@ -40,7 +40,7 @@ services:
       dockerfile: age/Dockerfile.age
     command: ["compute-node"]
     hostname: c1.age-docker-cluster_default
-    container_name: age-c1
+    container_name: c1
     privileged: true 
     volumes:
       - opt_age:/opt/age 
@@ -62,7 +62,7 @@ services:
       dockerfile: age/Dockerfile.age
     command: ["compute-node"]
     hostname: c2.age-docker-cluster_default
-    container_name: age-c2
+    container_name: c2
     privileged: true
     volumes:
       - opt_age:/opt/age
@@ -84,7 +84,7 @@ services:
     image: rsw:2022.07.1-554.pro3
     command: ["rsw"]
     hostname: rsw.age-docker-cluster_default
-    container_name: age-rsw
+    container_name: rsw
     privileged: true
     environment:
       RSW_LICENSE: ${RSW_LICENSE}

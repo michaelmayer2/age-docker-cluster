@@ -1,6 +1,6 @@
 FROM ubuntu:focal
 
-ARG GE_VER="2022.1.0"
+ARG AGE_VERSION
 
 # Install RStudio Workbench 
 ARG RSW_VER="2022.07.1-554.pro3"
@@ -27,11 +27,11 @@ RUN echo "rstudio:rstudio" | chpasswd
 RUN sudo -u rstudio bash -l -c "ssh-keygen -t rsa -N '' -f /home/rstudio/.ssh/id_rsa && cat /home/rstudio/.ssh/id_rsa.pub >> /home/rstudio/.ssh/authorized_keys"
 
 # Make sure that AGE commands are executable
-RUN echo ". /opt/age/${GE_VER}/default/common/settings.sh" >> /etc/bash.bashrc
+RUN echo ". /opt/age/${AGE_VERSION}/default/common/settings.sh" >> /etc/bash.bashrc
 
 # Deploy AGE launcher 
-COPY age/ge-${GE_VER}-rstudio-age-lx-amd64.tar.gz .
-RUN tar xvfz /ge-${GE_VER}-rstudio-age-lx-amd64.tar.gz -C /opt && rm -f /ge-${GE_VER}-rstudio-age-lx-amd64.tar.gz
+COPY age/ge-${AGE_VERSION}-rstudio-age-lx-amd64.tar.gz .
+RUN tar xvfz /ge-${AGE_VERSION}-rstudio-age-lx-amd64.tar.gz -C /opt && rm -f /ge-${AGE_VERSION}-rstudio-age-lx-amd64.tar.gz
 
 # Start with AGE provided templates and tune them subsequently
 RUN cp /opt/rstudio-age/conf-template/* /etc/rstudio/
@@ -49,7 +49,7 @@ RUN echo "server-shared-storage-path=/opt/rstudio/shared" >> /etc/rstudio/rserve
 	echo "audit-data-path=/opt/rstudio/shared/audit-data" >> /etc/rstudio/rserver.conf &&  \
 	echo "admin-enabled=1" >> /etc/rstudio/rserver.conf && \
 	echo "admin-group=rstudio" >> /etc/rstudio/rserver.conf
-RUN sed -i "s#^SGE_ROOT=.*#SGE_ROOT=/opt/age/${GE_VER}#" /etc/rstudio/launcher.AGE.conf && \
+RUN sed -i "s#^SGE_ROOT=.*#SGE_ROOT=/opt/age/${AGE_VERSION}#" /etc/rstudio/launcher.AGE.conf && \
 	sed -i "s#^SGE_CELL=.*#SGE_CELL=default#" /etc/rstudio/launcher.AGE.conf
 
 # Copy docker-start.sh 

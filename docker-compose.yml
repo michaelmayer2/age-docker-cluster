@@ -2,10 +2,12 @@ version: "2.2"
 
 services:
   license:
+    image: age-license:${LICENSE_MANAGER_VERSION:-15.2}
     build:
       context: .
       dockerfile: license/Dockerfile.license
-    image: age-license:15.0
+      args:
+        LICENSE_MANAGER_VERSION: ${LICENSE_MANAGER_VERSION:-15.2}
     hostname: license.age-docker-cluster_default
     container_name: age-license
     expose:
@@ -15,10 +17,12 @@ services:
     mac_address: de:59:34:6f:b6:98
 
   head:
+    image: age:${AGE_VERSION:-2022.1.2}
     build:
       context: .
       dockerfile: age/Dockerfile.age
-    image: age:2022.1.0  
+      args: 
+        AGE_VERSION: ${AGE_VERSION:-2022.1.2}
     command: ["head-node"]
     container_name: head 
     hostname: head.age-docker-cluster_default
@@ -34,10 +38,12 @@ services:
       - "license"
 
   c1:
-    image: age:2022.1.0 
+    image: age:${AGE_VERSION:-2022.1.2} 
     build:
       context: .
       dockerfile: age/Dockerfile.age
+      args: 
+        AGE_VERSION: ${AGE_VERSION:-2022.1.2}
     command: ["compute-node"]
     hostname: c1.age-docker-cluster_default
     container_name: c1
@@ -56,10 +62,12 @@ services:
       - "head"
 
   c2:
-    image: age:2022.1.0
+    image: age:${AGE_VERSION:-2022.1.2}
     build:
       context: .
       dockerfile: age/Dockerfile.age
+      args: 
+        AGE_VERSION: ${AGE_VERSION:-2022.1.2}
     command: ["compute-node"]
     hostname: c2.age-docker-cluster_default
     container_name: c2
@@ -81,7 +89,9 @@ services:
     build:
       context: . 
       dockerfile: rsw/Dockerfile.rsw
-    image: rsw:2022.07.1-554.pro3
+      args:
+        AGE_VERSION: ${AGE_VERSION:-2022.1.2}
+    image: rsw:2022.07.1-554.pro3-age-${AGE_VERSION:-2022.1.2}
     command: ["rsw"]
     hostname: rsw.age-docker-cluster_default
     container_name: rsw
@@ -97,10 +107,11 @@ services:
       - usr_lib_rstudio:/usr/lib/rstudio-server
       - shared_storage:/opt/rstudio/shared
     ports:
-      - "8989:8787"
+      - "8787:8787"
     depends_on:
       - "head"
-
+      - "c1"
+      - "c2"
 
 volumes:
   opt_age:

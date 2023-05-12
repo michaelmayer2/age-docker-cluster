@@ -1,18 +1,18 @@
 FROM ubuntu:focal
 
 # Set AGE Version
-ARG GE_VER="2022.1.0"
+ARG AGE_VERSION
 
 # COPY installers into container
-COPY age/ge-${GE_VER}-bin-lx-amd64.tar.gz . 
-COPY age/ge-${GE_VER}-common.tar.gz . 
+COPY age/ge-${AGE_VERSION}-bin-lx-amd64.tar.gz . 
+COPY age/ge-${AGE_VERSION}-common.tar.gz . 
 
 
 # Extract AGE binaries 
-RUN mkdir -p /opt/age/${GE_VER} &&  \
-      tar xvfz /ge-${GE_VER}-bin-lx-amd64.tar.gz -C /opt/age/${GE_VER} && \
-      tar xvfz /ge-${GE_VER}-common.tar.gz -C /opt/age/${GE_VER} && \
-      rm -rf /ge-${GE_VER}-bin-lx-amd64.tar.gz /ge-${GE_VER}-common.tar.gz
+RUN mkdir -p /opt/age/${AGE_VERSION} &&  \
+      tar xvfz /ge-${AGE_VERSION}-bin-lx-amd64.tar.gz -C /opt/age/${AGE_VERSION} && \
+      tar xvfz /ge-${AGE_VERSION}-common.tar.gz -C /opt/age/${AGE_VERSION} && \
+      rm -rf /ge-${AGE_VERSION}-bin-lx-amd64.tar.gz /ge-${AGE_VERSION}-common.tar.gz
 
 # Install a couple of tools 
 RUN apt-get update && apt-get install -y dnsutils vim iputils-ping 
@@ -31,11 +31,13 @@ RUN echo "rstudio:rstudio" | chpasswd
 
 
 # Copy installation template into container  
-COPY age/inst.conf /opt/age/${GE_VER}/ 
+COPY age/inst.conf /opt/age/${AGE_VERSION}/ 
 
 # Ensure AGE binaries are in users' PATH
-RUN echo ". /opt/age/${GE_VER}/default/common/settings.sh" >> /etc/bash.bashrc
+RUN echo ". /opt/age/${AGE_VERSION}/default/common/settings.sh" >> /etc/bash.bashrc
 
+# Ensure that inst.conf refers the correct Grid Engine version
+RUN sed -i "s/XXX/${AGE_VERSION}/" /opt/age/${AGE_VERSION}/inst.conf
 
 # Install R and RSW dependencies 
 # apt show  r-4.2.0  | grep ^Depends | cut -d ":" -f 2 | sed 's/\,/ /g'
